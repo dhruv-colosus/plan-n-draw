@@ -1,23 +1,15 @@
 import { createApp } from 'vue'
-import { createRouter, createWebHistory } from 'vue-router'
-import { VueQueryPlugin } from '@tanstack/vue-query'
 import { createPinia } from 'pinia'
-
-import './style.css'
+import { VueQueryPlugin } from '@tanstack/vue-query'
+import router from './router'
 import App from './App.vue'
+import './style.css'
 
-import About from './pages/aboutPage.vue'
-import Home from './pages/homePage.vue'
-
-const routes = [
-  { path: '/', component: Home },
-  { path: '/about', component: About },
-]
-
-const router = createRouter({
-  history: createWebHistory(),
-  routes,
-})
+const app = createApp(App)
 const pinia = createPinia()
 
-createApp(App).use(router).use(VueQueryPlugin).use(pinia).mount('#app')
+app.use(pinia)
+app.use(VueQueryPlugin)
+app.use(router)
+
+app.mount('#app')
