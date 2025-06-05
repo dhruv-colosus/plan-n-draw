@@ -5,6 +5,7 @@
         <NavbarComponent />
       </div>
       
+      
       <div class="flex items-center gap-2">
         <Button 
           variant="outline" 
@@ -58,6 +59,10 @@
         </div>
       </div>
     </div>
+    <div class="fixed top-5i
+     left-4 z-10 w-64">
+        <ToolsDisplay />
+      </div>
     
     <main class="pt-20">
       <slot />
@@ -78,6 +83,7 @@ import { useRouter } from 'vue-router'
 import { useAuthStore } from '../stores/auth'
 import NavbarComponent from '../components/navBar.vue'
 import { Button } from '../components/ui/button'
+import ToolsDisplay from '../components/ToolsDisplay.vue'
 
 const router = useRouter()
 const authStore = useAuthStore()

@@ -9,8 +9,8 @@
             variant="ghost" 
             size="sm" 
             class="p-1.5 hover:bg-gray-100 cursor-pointer"
-            :class="{ 'bg-primary text-white hover:bg-primary/90': selectedTool === 'hand' }"
-            @click="selectTool('hand')"
+            :class="{ 'bg-primary text-white hover:bg-primary/90': toolsStore.selectedTool === 'hand' }"
+            @click="toolsStore.selectTool('hand')"
           >
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 11.5V14m0-2.5v-6a1.5 1.5 0 113 0m-3 6a1.5 1.5 0 00-3 0v2a7.5 7.5 0 0015 0v-5a1.5 1.5 0 00-3 0m-6-3V11m0-5.5v-1a1.5 1.5 0 013 0v1m0 0V11m0-5.5a1.5 1.5 0 013 0v3m0 0V11" />
@@ -22,8 +22,8 @@
             variant="ghost" 
             size="sm" 
             class="p-1.5 hover:bg-gray-100 cursor-pointer"
-            :class="{ 'bg-primary text-white hover:bg-primary/90': selectedTool === 'square' }"
-            @click="selectTool('square')"
+            :class="{ 'bg-primary text-white hover:bg-primary/90': toolsStore.selectedTool === 'square' }"
+            @click="toolsStore.selectTool('square')"
           >
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <rect x="3" y="3" width="18" height="18" rx="2" ry="2" stroke-width="2"/>
@@ -35,8 +35,8 @@
             variant="ghost" 
             size="sm" 
             class="p-1.5 hover:bg-gray-100 cursor-pointer"
-            :class="{ 'bg-primary text-white hover:bg-primary/90': selectedTool === 'circle' }"
-            @click="selectTool('circle')"
+            :class="{ 'bg-primary text-white hover:bg-primary/90': toolsStore.selectedTool === 'circle' }"
+            @click="toolsStore.selectTool('circle')"
           >
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <circle cx="12" cy="12" r="9" stroke-width="2"/>
@@ -48,8 +48,8 @@
             variant="ghost" 
             size="sm" 
             class="p-1.5 hover:bg-gray-100 cursor-pointer"
-            :class="{ 'bg-primary text-white hover:bg-primary/90': selectedTool === 'arrow' }"
-            @click="selectTool('arrow')"
+            :class="{ 'bg-primary text-white hover:bg-primary/90': toolsStore.selectedTool === 'arrow' }"
+            @click="toolsStore.selectTool('arrow')"
           >
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
@@ -61,8 +61,8 @@
             variant="ghost" 
             size="sm" 
             class="p-1.5 hover:bg-gray-100 cursor-pointer"
-            :class="{ 'bg-primary text-white hover:bg-primary/90': selectedTool === 'text' }"
-            @click="selectTool('text')"
+            :class="{ 'bg-primary text-white hover:bg-primary/90': toolsStore.selectedTool === 'text' }"
+            @click="toolsStore.selectTool('text')"
           >
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
@@ -77,14 +77,14 @@
               class="p-1.5 hover:bg-gray-100 relative cursor-pointer"
               @click="showColorPicker = !showColorPicker"
             >
-              <div class="w-4 h-4 rounded border border-gray-300" :style="{ backgroundColor: selectedColor }"></div>
+              <div class="w-4 h-4 rounded border border-gray-300" :style="{ backgroundColor: toolsStore.selectedColor }"></div>
             </Button>
             
             <!-- Color Palette -->
             <div v-if="showColorPicker" class="absolute top-full mt-2 left-0 bg-white border border-gray-200 rounded-lg shadow-lg p-3 z-10">
               <div class="grid grid-cols-6 gap-2">
                 <div 
-                  v-for="color in colors" 
+                  v-for="color in toolsStore.colors" 
                   :key="color"
                   class="w-6 h-6 rounded cursor-pointer border border-gray-200 hover:scale-110 transition-transform"
                   :style="{ backgroundColor: color }"
@@ -134,8 +134,8 @@
               variant="ghost" 
               size="sm" 
               class="p-2 cursor-pointer"
-              :class="{ 'bg-primary text-white': selectedTool === tool }"
-              @click="selectTool(tool)"
+              :class="{ 'bg-primary text-white': toolsStore.selectedTool === tool }"
+              @click="toolsStore.selectTool(tool as any)"
             >
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <!-- Tool icons would go here -->
@@ -146,7 +146,7 @@
           <!-- Mobile Color Picker -->
           <div class="grid grid-cols-8 gap-2">
             <div 
-              v-for="color in colors" 
+              v-for="color in toolsStore.colors" 
               :key="color"
               class="w-6 h-6 rounded cursor-pointer border border-gray-200"
               :style="{ backgroundColor: color }"
@@ -162,27 +162,16 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { Button } from './ui/button'
+import { useToolsStore } from '../stores/tools'
+
+const toolsStore = useToolsStore()
 
 const isMobileMenuOpen = ref(false)
 const showColorPicker = ref(false)
-const selectedTool = ref('hand')
-const selectedColor = ref('#000000')
-
-const colors = [
-  '#000000', '#ffffff', '#ff0000', '#00ff00', '#0000ff', '#ffff00',
-  '#ff00ff', '#00ffff', '#ffa500', '#800080', '#008000', '#ffc0cb',
-  '#a52a2a', '#808080', '#000080', '#008080', '#800000', '#808000'
-]
-
-const selectTool = (tool: string) => {
-  selectedTool.value = tool
-  console.log('Selected tool:', tool)
-}
 
 const selectColor = (color: string) => {
-  selectedColor.value = color
+  toolsStore.selectColor(color)
   showColorPicker.value = false
-  console.log('Selected color:', color)
 }
 
 // Close color picker when clicking outside
